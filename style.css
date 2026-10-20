@@ -1,0 +1,1310 @@
+/* ==========================================================================
+   Safaqat Kitabiya ERP - Luxury Library & Financial System (Hujariya Style)
+   Architecture: 3 Files Only | Mobile-First + Right Drawer + Floating Dock
+   ========================================================================== */
+
+:root {
+  /* الوضع النهاري الدافئ والفخم (مستوحى من موسوعة الحجرية وهوية صفقات) */
+  --bg-main: #f6f3ec;
+  --bg-surface: #ffffff;
+  --bg-subtle: #ede8df;
+  --bg-glass: rgba(255, 255, 255, 0.92);
+  --bg-dock: #121716;
+
+  --text-primary: #141918;
+  --text-secondary: #4a5452;
+  --text-muted: #848e8c;
+
+  /* ألوان الهوية (الكحلي/الأسود الفاخر، الذهبي التراثي، والأحمر القرمزي) */
+  --brand-dark: #141c1b;
+  --brand-gold: #b88928;
+  --brand-gold-light: #fbf5e6;
+  --brand-gold-border: #e6d3a7;
+  --brand-crimson: #b91c1c;
+  --brand-crimson-light: #fef2f2;
+
+  /* ألوان الحالات المالية */
+  --success: #0d9488;
+  --success-bg: #f0fdfa;
+  --warning: #d97706;
+  --warning-bg: #fffbeb;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+  --info: #2563eb;
+  --info-bg: #eff6ff;
+
+  --border: #e4decfe6;
+  --border-strong: #d5cbb8;
+
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  --shadow-xs: 0 2px 6px rgba(20, 25, 24, 0.04);
+  --shadow-sm: 0 4px 16px rgba(20, 25, 24, 0.06);
+  --shadow-md: 0 10px 28px rgba(20, 25, 24, 0.1);
+  --shadow-dock: 0 14px 34px rgba(0, 0, 0, 0.32);
+
+  --transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* الوضع الليلي الملكي (أسود وذهبي وياقوتي) */
+[data-theme="dark"] {
+  --bg-main: #0b0e0e;
+  --bg-surface: #141919;
+  --bg-subtle: #1c2323;
+  --bg-glass: rgba(20, 25, 25, 0.92);
+  --bg-dock: #070909;
+
+  --text-primary: #f5f3ef;
+  --text-secondary: #b8c2c0;
+  --text-muted: #6e7a78;
+
+  --brand-dark: #facc15;
+  --brand-gold: #facc15;
+  --brand-gold-light: rgba(250, 204, 21, 0.12);
+  --brand-gold-border: rgba(250, 204, 21, 0.3);
+  --brand-crimson: #ef4444;
+  --brand-crimson-light: rgba(239, 68, 68, 0.15);
+
+  --success: #14b8a6;
+  --success-bg: rgba(20, 184, 166, 0.14);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.14);
+  --danger: #f87171;
+  --danger-bg: rgba(248, 113, 113, 0.14);
+  --info: #60a5fa;
+  --info-bg: rgba(96, 165, 250, 0.14);
+
+  --border: #232b2b;
+  --border-strong: #2f3a3a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  direction: rtl;
+  line-height: 1.55;
+  font-size: 15px;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   1. شاشة تسجيل الدخول الفخمة (Auth Gate)
+   ========================================================================== */
+.auth-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  background: radial-gradient(circle at top, #1f1916 0%, #0b0e0e 100%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: #141919;
+  border: 1px solid rgba(250, 204, 21, 0.25);
+  border-radius: var(--radius-xl);
+  padding: 36px 26px;
+  text-align: center;
+  color: #ffffff;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.6);
+}
+
+.auth-square-icon {
+  width: 78px;
+  height: 78px;
+  border-radius: 20px;
+  object-fit: cover;
+  margin: 0 auto 14px;
+  border: 2px solid #facc15;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+  display: block;
+}
+
+.auth-site-logo {
+  max-width: 210px;
+  max-height: 75px;
+  object-fit: contain;
+  margin: 0 auto 12px;
+  display: block;
+}
+
+.btn-google-login {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #b91c1c, #881313);
+  color: #ffffff;
+  border: 1px solid rgba(250, 204, 21, 0.4);
+  padding: 15px 20px;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 15.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 22px;
+}
+
+.btn-google-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(185, 28, 28, 0.45);
+}
+
+/* ==========================================================================
+   2. الهيدر العلوي (أسلوب موسوعة الحجرية + زر الثلاث شرطات ☰ باليمين)
+   ========================================================================== */
+.top-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--bg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+
+.header-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* زر الثلاث شرطات (القائمة الجانبية ☰) */
+.btn-hamburger {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-xs);
+}
+
+.btn-hamburger:hover {
+  border-color: var(--brand-gold);
+  transform: scale(1.03);
+}
+
+.brand-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-identity img {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1.5px solid var(--brand-gold);
+}
+
+.brand-text h1 {
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.brand-text span {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--brand-gold);
+  display: block;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.circle-action-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  box-shadow: var(--shadow-xs);
+}
+
+.circle-action-btn:hover {
+  border-color: var(--brand-gold);
+}
+
+.notif-dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 9px;
+  height: 9px;
+  background: var(--brand-crimson);
+  border-radius: 50%;
+  border: 1.5px solid var(--bg-surface);
+}
+
+/* ==========================================================================
+   3. القائمة الجانبية المنزلقة من اليمين (Slide-out Right Drawer ☰)
+   تعمل على الجوال والكمبيوتر معاً عند الضغط على الثلاث شرطات
+   ========================================================================== */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 14, 0.58);
+  backdrop-filter: blur(4px);
+  z-index: 900;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.drawer-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.side-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 300px;
+  max-width: 86vw;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border-strong);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(102%);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: -12px 0 36px rgba(0, 0, 0, 0.25);
+}
+
+.side-drawer.open {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  padding: 20px 18px;
+  background: #121716;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(250, 204, 21, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drawer-user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.drawer-user-card img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #facc15;
+}
+
+.drawer-user-info h4 {
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.drawer-user-info span {
+  font-size: 11.5px;
+  color: #facc15;
+  font-weight: 700;
+}
+
+.btn-close-drawer {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font-size: 19px;
+  cursor: pointer;
+}
+
+.drawer-links {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.drawer-link {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: right;
+  transition: var(--transition);
+}
+
+.drawer-link i {
+  font-size: 20px;
+  color: var(--brand-gold);
+}
+
+.drawer-link:hover {
+  background: var(--bg-subtle);
+}
+
+.drawer-link.active {
+  background: var(--brand-dark);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .drawer-link.active {
+  background: var(--brand-crimson);
+  color: #ffffff;
+}
+
+.drawer-link.active i {
+  color: #facc15;
+}
+
+.drawer-badge {
+  margin-right: auto;
+  background: var(--brand-crimson);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.drawer-footer {
+  padding: 14px 12px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+
+.btn-drawer-install {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(250, 204, 21, 0.4);
+  background: linear-gradient(135deg, #141c1b, #261717);
+  color: #facc15;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.btn-drawer-install:hover {
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   4. محرك البحث الذكي وشريط الفلاتر (Hujariya Search & Filter Pills)
+   ========================================================================== */
+.main-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 16px 14px 120px;
+}
+
+.smart-search-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.search-input-box {
+  flex: 1;
+  position: relative;
+}
+
+.search-input-box i {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 19px;
+  color: var(--brand-gold);
+}
+
+.search-input-box input {
+  width: 100%;
+  padding: 13px 46px 13px 16px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-xs);
+  transition: var(--transition);
+}
+
+.search-input-box input:focus {
+  outline: none;
+  border-color: var(--brand-gold);
+  box-shadow: 0 0 0 3px var(--brand-gold-light);
+}
+
+.btn-filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: var(--shadow-xs);
+}
+
+.btn-filter-toggle i {
+  color: var(--brand-gold);
+  font-size: 18px;
+}
+
+/* شريط كبسولات التصفية الأفقية (مثل الحجرية) */
+.filter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 14px;
+  scrollbar-width: none;
+}
+
+.filter-pills-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--brand-gold-border);
+  background: var(--brand-gold-light);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.filter-pill .pill-count {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--text-primary);
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  font-size: 11.5px;
+}
+
+.filter-pill.active {
+  background: #141c1b;
+  border-color: #141c1b;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .filter-pill.active {
+  background: var(--brand-gold);
+  border-color: var(--brand-gold);
+  color: #0b0e0e;
+}
+
+.filter-pill.active .pill-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: inherit;
+}
+
+/* ==========================================================================
+   5. بطاقة الترحيب والملخص السريع (Hero Highlight Card - Hujariya Style)
+   ========================================================================== */
+.hero-highlight-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background: var(--brand-gold-light);
+  color: var(--brand-gold);
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.hero-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.hero-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+/* ==========================================================================
+   6. شبكة الكتب العمودية الفخمة (2-Column Vertical Book Grid - Hujariya Style)
+   ========================================================================== */
+.books-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+@media (min-width: 768px) {
+  .books-showcase-grid {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 18px;
+  }
+}
+
+.book-v-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  position: relative;
+}
+
+.book-v-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.book-cover-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4.2;
+  background: linear-gradient(145deg, #1c2423, #0e1312);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.book-cover-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.book-v-card:hover .book-cover-box img {
+  transform: scale(1.04);
+}
+
+/* غلاف افتراضي فخم للكتب التي بدون صورة */
+.book-Fallback-cover {
+  width: 100%;
+  height: 100%;
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: radial-gradient(circle at top, #271718 0%, #111615 100%);
+  color: #facc15;
+  border: 4px double rgba(250, 204, 21, 0.28);
+}
+
+.book-Fallback-cover i {
+  font-size: 34px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.book-Fallback-cover h4 {
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+
+.book-Fallback-cover span {
+  font-size: 11.5px;
+  color: #cbd5e1;
+}
+
+/* شارة حالة العقد ونجمة المفضلة فوق الغلاف */
+.cover-top-badges {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+.contract-mini-pill {
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  font-size: 10.5px;
+  font-weight: 800;
+  backdrop-filter: blur(8px);
+  background: rgba(15, 23, 22, 0.78);
+  color: #ffffff;
+}
+
+.contract-mini-pill.green { color: #34d399; }
+.contract-mini-pill.amber { color: #fbbf24; }
+.contract-mini-pill.red { color: #f87171; }
+
+.btn-fav-overlay {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(15, 23, 22, 0.72);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-fav-overlay.active {
+  color: #facc15;
+}
+
+.book-v-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.book-v-title {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.book-v-author {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.book-v-author:hover {
+  color: var(--brand-crimson);
+}
+
+.book-v-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: var(--bg-subtle);
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11.5px;
+}
+
+.book-v-stats div span {
+  display: block;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.book-v-stats div strong {
+  font-size: 12.5px;
+  color: var(--text-primary);
+}
+
+.book-v-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.btn-sell-card {
+  flex: 1;
+  background: #141c1b;
+  color: #ffffff;
+  border: none;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+[data-theme="dark"] .btn-sell-card {
+  background: var(--brand-crimson);
+}
+
+.btn-sell-card:active {
+  transform: scale(0.96);
+}
+
+/* ==========================================================================
+   7. بطاقات الإحصائيات المالية والكُتّاب والموظفين
+   ========================================================================== */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+@media (min-width: 768px) {
+  .metrics-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.metric-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  box-shadow: var(--shadow-xs);
+}
+
+.metric-box-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.metric-box-val {
+  font-size: 18.5px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.metric-box-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+.metric-box-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  flex-shrink: 0;
+}
+
+.metric-box-icon.gold { background: var(--brand-gold-light); color: var(--brand-gold); }
+.metric-box-icon.green { background: var(--success-bg); color: var(--success); }
+.metric-box-icon.crimson { background: var(--brand-crimson-light); color: var(--brand-crimson); }
+.metric-box-icon.blue { background: var(--info-bg); color: var(--info); }
+
+/* بطاقات الكُتّاب والموظفين */
+.authors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+  gap: 14px;
+}
+
+.author-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.author-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.author-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  object-fit: cover;
+  background: var(--brand-gold-light);
+  color: var(--brand-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 800;
+  flex-shrink: 0;
+  border: 1px solid var(--brand-gold-border);
+}
+
+/* ==========================================================================
+   8. الشريط السفلي العائم بـ 5 أزرار (Hujariya Floating Bottom Dock)
+   ========================================================================== */
+.floating-dock-wrap {
+  position: fixed;
+  bottom: 14px;
+  left: 12px;
+  right: 12px;
+  z-index: 500;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.floating-dock {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-dock);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  padding: 7px 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  box-shadow: var(--shadow-dock);
+}
+
+.dock-item {
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 4px;
+  border-radius: var(--radius-full);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.dock-item i {
+  font-size: 20px;
+}
+
+.dock-item.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.dock-item.active i {
+  color: #facc15;
+}
+
+/* زر الإضافة المركزي (+) في منتصف الشريط السفلي */
+.dock-item-add {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 2px solid rgba(250, 204, 21, 0.55);
+  background: linear-gradient(135deg, #b91c1c, #7f1d1d);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(185, 28, 28, 0.5);
+  transition: var(--transition);
+}
+
+.dock-item-add:hover {
+  transform: scale(1.06);
+}
+
+/* نافذة خيارات الإضافة السريعة عند الضغط على زر (+) في الشريط السفلي */
+.quick-add-sheet {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 14, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 850;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px 14px 90px;
+}
+
+.quick-add-sheet.show {
+  display: flex;
+}
+
+.quick-add-box {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  box-shadow: var(--shadow-dock);
+  animation: slideUp 0.22s ease-out;
+}
+
+.quick-add-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.quick-add-card {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.quick-add-card i {
+  font-size: 24px;
+  color: var(--brand-crimson);
+}
+
+.quick-add-card:hover {
+  border-color: var(--brand-gold);
+  background: var(--brand-gold-light);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   9. صفحات الإدخال الكاملة المستقلة (Full-Page Dedicated Forms)
+   ========================================================================== */
+.page-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.page-card-header {
+  padding: 16px 18px;
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.page-card-body {
+  padding: 18px;
+}
+
+.form-block {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 15px;
+  margin-bottom: 14px;
+}
+
+.form-block-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--brand-crimson);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+@media (max-width: 680px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+.field { margin-bottom: 12px; }
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: var(--text-primary);
+}
+
+.input-ctrl {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.input-ctrl:focus {
+  outline: none;
+  border-color: var(--brand-gold);
+}
+
+/* الأزرار والشارات العامة */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 800;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-dark { background: #141c1b; color: #ffffff; }
+.btn-crimson { background: var(--brand-crimson); color: #ffffff; }
+.btn-gold { background: var(--brand-gold); color: #ffffff; }
+.btn-success { background: var(--success); color: #ffffff; }
+.btn-danger { background: var(--danger); color: #ffffff; }
+.btn-outline { background: var(--bg-surface); border-color: var(--border-strong); color: var(--text-primary); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11.5px;
+  font-weight: 800;
+}
+
+.badge.green { background: var(--success-bg); color: var(--success); }
+.badge.amber { background: var(--warning-bg); color: var(--warning); }
+.badge.red { background: var(--danger-bg); color: var(--danger); }
+.badge.gold { background: var(--brand-gold-light); color: var(--brand-gold); }
+.badge.blue { background: var(--info-bg); color: var(--info); }
+
+.row-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.perm-checks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+.perm-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.perm-box input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brand-crimson);
+}
+
+/* حوار التأكيد السريع (للبيع السريع والحذف وتسجيل الخروج فقط) */
+.confirm-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 14, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 1200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.confirm-modal.show { display: flex; }
+
+.confirm-box {
+  width: 100%;
+  max-width: 390px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: var(--shadow-dock);
+}
+
+.toast-area {
+  position: fixed;
+  top: 76px;
+  left: 16px;
+  right: 16px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast-item {
+  background: #141c1b;
+  color: #ffffff;
+  border: 1px solid #facc15;
+  padding: 11px 18px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-md);
+}
