@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#141c1b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="نظام صفقات" />
+  <title>نظام صفقات كتابية | الإدارة المالية والتعاقدات</title>
+
+  <!-- أيقونة التطبيق المربعة الرسمية -->
+  <link id="app-favicon" rel="icon" href="https://ibb.co/ymRzy6cb" />
+  <link id="apple-touch-icon" rel="apple-touch-icon" href="https://ibb.co/ymRzy6cb" />
+
+  <!-- خط تجوال الرسمي -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+  <!-- مكتبة الأيقونات العالمية Remix Icon -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+
+  <!-- مكتبة الرسوم البيانية Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <!-- ملف التصميم -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ====================================================================
+       1. شاشة تسجيل الدخول والمصادقة (تظهر فقط لغير المسجلين)
+       ==================================================================== -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-card">
+      <img id="auth-icon-img" src="https://ibb.co/ymRzy6cb" alt="نظام صفقات" class="auth-square-icon js-square-icon" />
+      <img id="auth-logo-img" src="https://ibb.co/39hSSp9t" alt="صفقات كتابية" class="auth-site-logo js-wide-logo" />
+      <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 6px; color: #facc15;">نظام صفقات كتابية</h2>
+      <p style="font-size: 13.5px; color: #cbd5e1;">البوابة الداخلية لتوثيق العقود والمبيعات والإدارة المالية</p>
+
+      <button id="btn-google-login" class="btn-google-login">
+        <i class="ri-google-fill" style="font-size: 20px;"></i>
+        <span>تسجيل الدخول عبر حساب Google</span>
+      </button>
+
+      <div id="auth-error-box" style="display: none; margin-top: 16px; padding: 12px; background: rgba(220, 38, 38, 0.2); border: 1px solid #ef4444; color: #fca5a5; border-radius: 12px; font-size: 13px; font-weight: 700;">
+        <i class="ri-error-warning-fill"></i>
+        <span id="auth-error-text">عذراً، هذا الحساب غير مصرح له بالدخول.</span>
+      </div>
+
+      <div style="margin-top: 20px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 10px; font-size: 12px; color: #94a3b8; display: flex; align-items: center; justify-content: center; gap: 6px;">
+        <i class="ri-shield-check-line" style="color: #facc15; font-size: 16px;"></i>
+        <span>حفظ تلقائي للجلسة: لن يُطلب منك الدخول مرة أخرى</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       2. واجهة النظام الرئيسية (تفتح تلقائياً فور التحقق من الجلسة)
+       ==================================================================== -->
+  <div id="app-screen" style="display: none;">
+
+    <!-- أ) الهيدر العلوي (بأسلوب موسوعة الحجرية + زر الثلاث شرطات ☰ في اليمين) -->
+    <header class="top-header">
+      <div class="header-inner">
+        <div class="header-right">
+          <!-- زر الثلاث شرطات لفتح القائمة الجانبية في الجوال والكمبيوتر -->
+          <button id="btn-open-drawer" class="btn-hamburger" title="فتح القائمة الجانبية">
+            <i class="ri-menu-3-line"></i>
+          </button>
+
+          <div class="brand-identity" style="cursor: pointer;" id="brand-home-trigger">
+            <img src="https://ibb.co/ymRzy6cb" alt="أيقونة صفقات" class="js-square-icon" />
+            <div class="brand-text">
+              <h1>صفقات كتابية</h1>
+              <span id="header-role-subtitle">النظام المالي والتوثيقي</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-left">
+          <!-- زر التعليمات السريع -->
+          <button id="btn-header-guide" class="circle-action-btn" title="لوحة التعليمات">
+            <i class="ri-question-line"></i>
+          </button>
+
+          <!-- زر التنبيهات الإدارية -->
+          <button id="btn-header-notif" class="circle-action-btn" title="التنبيهات الإدارية">
+            <i class="ri-notification-3-line"></i>
+            <span id="header-notif-dot" class="notif-dot" style="display: none;"></span>
+          </button>
+
+          <!-- زر الوضع الليلي والنهاري -->
+          <button id="btn-theme-toggle" class="circle-action-btn" title="تبديل الوضع الليلي / النهاري">
+            <i class="ri-contrast-2-line" id="theme-icon"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ب) القائمة الجانبية المنزلقة من اليمين (Drawer ☰ للجوال والكمبيوتر) -->
+    <div id="drawer-backdrop" class="drawer-backdrop"></div>
+    <aside id="side-drawer" class="side-drawer">
+      <div class="drawer-header">
+        <div class="drawer-user-card">
+          <img id="drawer-user-avatar" src="https://ibb.co/ymRzy6cb" alt="Avatar" class="js-user-avatar" />
+          <div class="drawer-user-info">
+            <h4 id="drawer-user-name">المستخدم</h4>
+            <span id="drawer-user-role">الصلاحية</span>
+          </div>
+        </div>
+        <button id="btn-close-drawer" class="btn-close-drawer" title="إغلاق القائمة">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+
+      <nav class="drawer-links" id="drawer-nav-list">
+        <button class="drawer-link active" data-nav="view-dashboard" id="dlink-dashboard">
+          <i class="ri-compass-3-line"></i>
+          <span>الرئيسية والإحصائيات</span>
+        </button>
+
+        <button class="drawer-link" data-nav="view-contracts" id="dlink-contracts">
+          <i class="ri-book-2-line"></i>
+          <span>الكتب والعقود (المبيعات)</span>
+        </button>
+
+        <button class="drawer-link" data-nav="view-authors" id="dlink-authors">
+          <i class="ri-quill-pen-line"></i>
+          <span>ملفات الكُتّاب والمؤلفين</span>
+        </button>
+
+        <button class="drawer-link" data-nav="view-finance" id="dlink-finance">
+          <i class="ri-exchange-dollar-line"></i>
+          <span>السجل المالي والمصاريف</span>
+        </button>
+
+        <button class="drawer-link" data-nav="view-staff" id="dlink-staff" style="display: none;">
+          <i class="ri-shield-user-line"></i>
+          <span>الموظفون والصلاحيات</span>
+        </button>
+
+        <button class="drawer-link" data-nav="view-notifications" id="dlink-notifications">
+          <i class="ri-notification-badge-line"></i>
+          <span>التنبيهات الإدارية</span>
+          <span id="drawer-notif-badge" class="drawer-badge" style="display: none;">0</span>
+        </button>
+
+        <button class="drawer-link" data-nav="view-guide" id="dlink-guide">
+          <i class="ri-book-read-line"></i>
+          <span>لوحة التعليمات</span>
+        </button>
+
+        <button class="drawer-link" data-nav="view-profile" id="dlink-profile">
+          <i class="ri-user-settings-line"></i>
+          <span>حسابي وسجل نشاطي</span>
+        </button>
+      </nav>
+
+      <!-- آخر عنصر في القائمة الجانبية: تثبيت التطبيق المباشر بضغطة زر -->
+      <div class="drawer-footer">
+        <button id="btn-drawer-install-pwa" class="btn-drawer-install">
+          <i class="ri-install-line" style="font-size: 20px;"></i>
+          <span>تثبيت التطبيق على الجهاز</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ج) المحتوى الرئيسي للصفحات (Main Container) -->
+    <main class="main-container">
+
+      <!-- شريط استعادة المسودة المحفوظة تلقائياً في المتصفح -->
+      <div id="draft-banner" class="row-item" style="display: none; background: var(--warning-bg); border-color: var(--brand-gold);">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800;">
+          <i class="ri-save-3-fill" style="font-size: 20px; color: var(--brand-crimson);"></i>
+          <span id="draft-banner-text">لديك بيانات مدخلة محفوظة تلقائياً لم تكتمل بعد!</span>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button id="btn-restore-draft" class="btn btn-crimson" style="padding: 6px 12px; font-size: 12px;">متابعة الإدخال</button>
+          <button id="btn-discard-draft" class="btn btn-outline" style="padding: 6px 10px; font-size: 12px;">تجاهل</button>
+        </div>
+      </div>
+
+      <!-- ================================================================
+           الصفحة 1: الرئيسية والإحصائيات والبحث الفوري (Dashboard View)
+           ================================================================ -->
+      <section id="view-dashboard" class="app-view">
+
+        <!-- محرك البحث الذكي الشامل في أعلى الرئيسية (مثل موسوعة الحجرية) -->
+        <div class="smart-search-row">
+          <div class="search-input-box">
+            <i class="ri-search-2-line"></i>
+            <input type="text" id="global-smart-search" placeholder="ابحث بذكاء عن كتاب، مؤلف، تصنيف، أو رقم إيداع..." />
+          </div>
+          <button id="btn-go-books-filter" class="btn-filter-toggle">
+            <i class="ri-equalizer-line"></i>
+            <span>تصفية</span>
+          </button>
+        </div>
+
+        <!-- نتائج البحث الذكي الفوري (تظهر فور كتابة أي حرف) -->
+        <div id="Quick-search-results-box" class="page-card" style="display: none; margin-bottom: 18px;">
+          <div class="page-card-header">
+            <h4 style="font-size: 14.5px; font-weight: 800;"><i class="ri-flashlight-fill" style="color: var(--brand-gold);"></i> نتائج البحث الذكي الفوري</h4>
+            <button id="btn-clear-global-search" class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">إغلاق البحث</button>
+          </div>
+          <div class="page-card-body" id="global-search-results-content"></div>
+        </div>
+
+        <!-- بطاقة الترحيب المصري والملخص اليومي (بأسلوب بطاقة الحجرية العلوية) -->
+        <div class="hero-highlight-card">
+          <div style="flex: 1;">
+            <div class="hero-tag">
+              <i class="ri-sparkling-2-fill"></i>
+              <span>مزامنة مالية سحابية فورية</span>
+            </div>
+            <h2 class="hero-title" id="greeting-headline">يا صباح الفل والياسمين!</h2>
+            <p class="hero-sub" id="greeting-subline">نهارك نادي ومليان بركة ورزق.. شغل موفق النهاردة بإذن الله</p>
+            <button id="btn-hero-open-books" class="btn btn-dark" style="padding: 9px 16px; font-size: 13px;">
+              <i class="ri-play-fill"></i>
+              <span>استعراض الكتب وتسجيل بيع</span>
+            </button>
+          </div>
+          <img src="https://ibb.co/ymRzy6cb" alt="صفقات" class="js-square-icon" style="width: 68px; height: 68px; border-radius: 16px; object-fit: cover; border: 1.5px solid var(--brand-gold); flex-shrink: 0;" />
+        </div>
+
+        <!-- البطاقات المالية الأربع (بالجنيه المصري ج.م) -->
+        <div class="metrics-grid" id="dashboard-metrics-grid">
+          <div class="metric-box">
+            <div>
+              <div class="metric-box-label">إجمالي المبيعات</div>
+              <div class="metric-box-val" id="stat-total-rev">0 ج.م</div>
+              <div class="metric-box-sub" id="stat-total-copies">0 نسخة مباعة</div>
+            </div>
+            <div class="metric-box-icon crimson"><i class="ri-funds-box-fill"></i></div>
+          </div>
+
+          <div class="metric-box">
+            <div>
+              <div class="metric-box-label">صافي أرباح الدار</div>
+              <div class="metric-box-val" id="stat-net-profit">0 ج.م</div>
+              <div class="metric-box-sub">بعد النسب والمصاريف</div>
+            </div>
+            <div class="metric-box-icon green"><i class="ri-safe-2-fill"></i></div>
+          </div>
+
+          <div class="metric-box">
+            <div>
+              <div class="metric-box-label">مستحقات الكُتّاب</div>
+              <div class="metric-box-val" id="stat-authors-unpaid">0 ج.م</div>
+              <div class="metric-box-sub" id="stat-authors-paid">سُدد: 0 ج.م</div>
+            </div>
+            <div class="metric-box-icon gold"><i class="ri-wallet-3-fill"></i></div>
+          </div>
+
+          <div class="metric-box">
+            <div>
+              <div class="metric-box-label">المصاريف التشغيلية</div>
+              <div class="metric-box-val" id="stat-total-exp">0 ج.م</div>
+              <div class="metric-box-sub">طباعة وتسويق وشحن</div>
+            </div>
+            <div class="metric-box-icon blue"><i class="ri-receipt-fill"></i></div>
+          </div>
+        </div>
+
+        <!-- لوحة الرسوم البيانية التفاعلية -->
+        <div class="page-card">
+          <div class="page-card-header">
+            <h3 style="font-size: 15px; font-weight: 800;">
+              <i class="ri-bar-chart-grouped-fill" style="color: var(--brand-gold);"></i>
+              <span>المؤشر البياني للمبيعات وأعلى الكتب تحقيقاً للإيرادات</span>
+            </h3>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn btn-dark js-chart-type" data-type="bar" style="padding: 5px 10px; font-size: 12px;">أعمدة</button>
+              <button class="btn btn-outline js-chart-type" data-type="line" style="padding: 5px 10px; font-size: 12px;">خطي</button>
+              <button class="btn btn-outline js-chart-type" data-type="doughnut" style="padding: 5px 10px; font-size: 12px;">دائري</button>
+            </div>
+          </div>
+          <div class="page-card-body">
+            <div style="position: relative; height: 230px; width: 100%;">
+              <canvas id="salesChartCanvas"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- أحدث وإصدارات الكتب المفضلة (بأسلوب البطاقات العمودية في الحجرية) -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin: 18px 0 12px;">
+          <h3 style="font-size: 16px; font-weight: 800;">
+            <i class="ri-star-smile-fill" style="color: var(--brand-gold);"></i>
+            <span>الكتب المميزة والأكثر مبيعاً</span>
+          </h3>
+          <button id="btn-dash-see-all-books" class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">عرض الكل</button>
+        </div>
+        <div id="dashboard-books-showcase" class="books-showcase-grid"></div>
+      </section>
+
+      <!-- ================================================================
+           الصفحة 2: الكتب والعقود والمبيعات (Books & Contracts Showcase)
+           ================================================================ -->
+      <section id="view-contracts" class="app-view" style="display: none;">
+        <div class="smart-search-row">
+          <div class="search-input-box">
+            <i class="ri-search-2-line"></i>
+            <input type="text" id="books-search-input" placeholder="ابحث باسم الكتاب، اسم الكاتب، أو التصنيف..." />
+          </div>
+          <button id="btn-top-add-contract" class="btn btn-crimson" style="border-radius: 99px; padding: 12px 18px;">
+            <i class="ri-add-line"></i>
+            <span>إضافة عقد كتاب</span>
+          </button>
+        </div>
+
+        <!-- كبسولات الفرز الأفقية مع العدادات (مثل موسوعة الحجرية) -->
+        <div class="filter-pills-bar">
+          <button class="filter-pill active" data-book-filter="all">
+            <span>الكل</span>
+            <span class="pill-count" id="count-books-all">0</span>
+          </button>
+          <button class="filter-pill" data-book-filter="fav">
+            <i class="ri-vip-diamond-line"></i>
+            <span>الأكثر طلباً (المفضلة)</span>
+            <span class="pill-count" id="count-books-fav">0</span>
+          </button>
+          <button class="filter-pill" data-book-filter="active">
+            <i class="ri-shield-check-line"></i>
+            <span>عقود سارية</span>
+            <span class="pill-count" id="count-books-active">0</span>
+          </button>
+          <button class="filter-pill" data-book-filter="expiring">
+            <i class="ri-time-line"></i>
+            <span>قاربت على الانتهاء / منتهية</span>
+            <span class="pill-count" id="count-books-expiring">0</span>
+          </button>
+        </div>
+
+        <div id="contracts-books-grid" class="books-showcase-grid"></div>
+      </section>
+
+      <!-- ================================================================
+           الصفحة 3: دليل الكُتّاب والمؤلفين (Authors Directory)
+           ================================================================ -->
+      <section id="view-authors" class="app-view" style="display: none;">
+        <div class="smart-search-row" style="margin-bottom: 16px;">
+          <div class="search-input-box">
+            <i class="ri-search-2-line"></i>
+            <input type="text" id="authors-search-input" placeholder="ابحث عن مؤلف بالاسم أو البريد الإلكتروني أو الهاتف..." />
+          </div>
+          <button id="btn-top-add-author" class="btn btn-dark" style="border-radius: 99px; padding: 12px 18px;">
+            <i class="ri-user-add-line"></i>
+            <span>إضافة كاتب</span>
+          </button>
+        </div>
+
+        <div id="authors-directory-grid" class="authors-grid"></div>
+      </section>
+
+      <!-- ================================================================
+           الصفحة 4: الملف الشخصي الكامل للكاتب وعقوده (Single Author Profile)
+           ================================================================ -->
+      <section id="view-author-detail" class="app-view" style="display: none;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+          <button id="btn-back-authors-list" class="btn btn-outline">
+            <i class="ri-arrow-right-line"></i>
+            <span>عودة لقائمة المؤلفين</span>
+          </button>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button id="btn-author-new-contract" class="btn btn-crimson">
+              <i class="ri-file-add-line"></i>
+              <span>إضافة عقد كتاب للمؤلف</span>
+            </button>
+            <button id="btn-author-new-payout" class="btn btn-success">
+              <i class="ri-hand-coin-line"></i>
+              <span>تسديد دفعة + إيصال</span>
+            </button>
+            <button id="btn-author-open-report" class="btn btn-outline">
+              <i class="ri-mail-send-line"></i>
+              <span>إرسال تقرير / ترحيب</span>
+            </button>
+            <button id="btn-author-copy-link" class="btn btn-outline">
+              <i class="ri-links-line"></i>
+              <span>نسخ رابط البوابة</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="author-profile-banner" class="row-item" style="margin-bottom: 16px;"></div>
+
+        <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+          <div class="metric-box">
+            <div>
+              <div class="metric-box-label">إجمالي أرباح المؤلف</div>
+              <div class="metric-box-val" id="author-det-earned">0 ج.م</div>
+              <div class="metric-box-sub" id="author-det-copies">0 نسخة مباعة</div>
+            </div>
+            <div class="metric-box-icon blue"><i class="ri-coins-fill"></i></div>
+          </div>
+          <div class="metric-box">
+            <div>
+              <div class="metric-box-label">إجمالي المسدد للمؤلف</div>
+              <div class="metric-box-val" id="author-det-paid" style="color: var(--success);">0 ج.م</div>
+              <div class="metric-box-sub">بإيصالات رسمية</div>
+            </div>
+            <div class="metric-box-icon green"><i class="ri-checkbox-circle-fill"></i></div>
+          </div>
+          <div class="metric-box">
+            <div>
+              <div class="metric-box-label">الرصيد المتبقي المستحق</div>
+              <div class="metric-box-val" id="author-det-balance" style="color: var(--brand-crimson);">0 ج.م</div>
+              <div class="metric-box-sub">صافي المستحقات</div>
+            </div>
+            <div class="metric-box-icon crimson"><i class="ri-scales-3-fill"></i></div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 15.5px; font-weight: 800; margin: 18px 0 12px;">
+          <i class="ri-book-mark-fill" style="color: var(--brand-gold);"></i>
+          <span>الكتب والعقود المرتبطة بهذا المؤلف</span>
+        </h3>
+        <div id="author-det-books-grid" class="books-showcase-grid" style="margin-bottom: 22px;"></div>
+
+        <h3 style="font-size: 15.5px; font-weight: 800; margin: 18px 0 12px;">
+          <i class="ri-receipt-fill" style="color: var(--success);"></i>
+          <span>سجل الحوالات والإيصالات المسددة للمؤلف</span>
+        </h3>
+        <div id="author-det-payouts-list"></div>
+      </section>
+
+      <!-- ================================================================
+           الصفحة 5: السجل المالي والمصاريف (Finance & Expenses View)
+           ================================================================ -->
+      <section id="view-finance" class="app-view" style="display: none;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
+          <div>
+            <h3 style="font-size: 17px; font-weight: 800;"><i class="ri-exchange-dollar-fill" style="color: var(--success);"></i> التوثيق المالي الزمني (المبيعات، المصاريف، والدفعات)</h3>
+            <p style="font-size: 12.5px; color: var(--text-secondary);">كافة الحركات المالية موثقة بالتاريخ واسم المنفذ بالجنيه المصري</p>
+          </div>
+          <button id="btn-top-add-expense" class="btn btn-danger">
+            <i class="ri-subtract-line"></i>
+            <span>تسجيل مصروف تشغيلي</span>
+          </button>
+        </div>
+        <div id="finance-timeline-list"></div>
+      </section>
+
+      <!-- ================================================================
+           الصفحة 6: الموظفون والصلاحيات والرقابة (Staff Management View)
+           ================================================================ -->
+      <section id="view-staff" class="app-view" style="display: none;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
+          <div>
+            <h3 style="font-size: 17px; font-weight: 800;"><i class="ri-shield-user-fill" style="color: var(--brand-gold);"></i> إدارة الموظفين، الصلاحيات الـ 8 المرنة، وسجل الرقابة</h3>
+            <p style="font-size: 12.5px; color: var(--text-secondary);">تخصيص صلاحيات كل موظف بدقة ومراقبة كافة عملياته</p>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button id="btn-staff-send-notif" class="btn btn-outline">
+              <i class="ri-megaphone-line" style="color: var(--brand-gold);"></i>
+              <span>إرسال تنبيه</span>
+            </button>
+            <button id="btn-top-add-staff" class="btn btn-crimson">
+              <i class="ri-user-add-line"></i>
+              <span>إضافة موظف وتخصيص صلاحياته</span>
+            </button>
+          </div>
+        </div>
+        <div id="staff-cards-grid" class="authors-grid"></div>
+      </section>
+
+      <!-- ================================================================
+           الصفحة 7: التنبيهات الإدارية (Notifications View)
+           ================================================================ -->
+      <section id="view-notifications" class="app-view" style="display: none;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+          <h3 style="font-size: 17px; font-weight: 800;"><i class="ri-notification-3-fill" style="color: var(--brand-gold);"></i> مركز التنبيهات والتوجيهات الإدارية</h3>
+          <button id="btn-notif-new" class="btn btn-crimson" style="display: none;">
+            <i class="ri-send-plane-fill"></i>
+            <span>إرسال تنبيه جديد</span>
+          </button>
+        </div>
+        <div id="notifications-stack-list"></div>
+      </section>
+
+      <!-- ================================================================
+           الصفحة 8: لوحة التعليمات الذكية حسب الصلاحية (Guide View)
+           ================================================================ -->
+      <section id="view-guide" class="app-view" style="display: none;">
+        <div id="smart-guide-box"></div>
+      </section>
+
+      <!-- ================================================================
+           الصفحة 9: حسابي، الملف الشخصي، سجل النشاط، وتسجيل الخروج
+           ================================================================ -->
+      <section id="view-profile" class="app-view" style="display: none;">
+        <div class="page-card">
+          <div class="page-card-header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <img id="profile-card-avatar" src="https://ibb.co/ymRzy6cb" alt="Avatar" class="author-avatar js-user-avatar" style="border-radius: 50%;" />
+              <div>
+                <h3 id="profile-card-name" style="font-size: 17px; font-weight: 800;">اسم المستخدم</h3>
+                <p id="profile-card-email" style="font-size: 12.5px; color: var(--text-secondary);" dir="ltr"></p>
+              </div>
+            </div>
+            <span id="profile-card-role" class="badge gold">الصلاحية</span>
+          </div>
+
+          <form id="form-profile-update" class="page-card-body">
+            <div class="grid-2">
+              <div class="field">
+                <label>الاسم الظاهر في النظام والترحيب</label>
+                <input type="text" id="profile-name-input" class="input-ctrl" required />
+              </div>
+              <div class="field">
+                <label>تغيير الصورة الشخصية (تُضغط وتُرفع تلقائياً)</label>
+                <input type="file" id="profile-avatar-file" class="input-ctrl" accept="image/*" />
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 10px; padding-top: 14px; border-top: 1px solid var(--border);">
+              <button type="submit" id="btn-save-profile" class="btn btn-dark">
+                <i class="ri-save-3-line"></i>
+                <span>حفظ التعديلات الشخصية</span>
+              </button>
+
+              <!-- زر تسجيل الخروج الرسمي من صفحة الملف الشخصي كما طلبت -->
+              <button type="button" id="btn-profile-logout" class="btn btn-danger">
+                <i class="ri-logout-box-r-line"></i>
+                <span>تسجيل الخروج من الحساب</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <h4 id="audit-log-title" style="font-size: 15.5px; font-weight: 800;">
+            <i class="ri-history-line" style="color: var(--brand-gold);"></i>
+            <span>سجل نشاطي والعمليات الموثقة في النظام</span>
+          </h4>
+          <button id="btn-back-my-logs" class="btn btn-outline" style="display: none; padding: 6px 12px; font-size: 12px;">عرض نشاطي أنا</button>
+        </div>
+        <div id="audit-logs-list"></div>
+      </section>
+
+      <!-- ================================================================
+           الصفحة 10: بوابة الكاتب الخاصة المعزولة (Author Personal Portal)
+           ================================================================ -->
+      <section id="view-author-portal" class="app-view" style="display: none;">
+        <div class="row-item" style="background: var(--warning-bg); border-color: var(--brand-gold); font-size: 13px; font-weight: 700;">
+          <div>
+            <i class="ri-shield-keyhole-fill" style="color: var(--brand-crimson); font-size: 18px; vertical-align: middle;"></i>
+            <span>بوابة خاصة بالمؤلف: هذه الصفحة مرتبطة ببريدك الشخصي لمتابعة عقودك ومبيعاتك لحظياً. يُمنع مشاركتها مع أي طرف آخر.</span>
+          </div>
+        </div>
+
+        <div class="row-item" style="margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <img id="portal-author-avatar" src="https://ibb.co/ymRzy6cb" class="author-avatar" style="border-radius: 50%;" />
+            <div>
+              <h3 id="portal-author-name" style="font-size: 18px; font-weight: 800;">مرحباً بك</h3>
+              <p style="font-size: 12.5px; color: var(--text-secondary);">بوابة المؤلف الرسمية - دار صفقات كتابية</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <label class="btn btn-outline" style="cursor: pointer;">
+              <i class="ri-camera-switch-line"></i>
+              <span>تغيير صورتي</span>
+              <input type="file" id="portal-author-file" accept="image/*" style="display: none;" />
+            </label>
+            <button type="button" id="btn-portal-logout" class="btn btn-danger">
+              <i class="ri-logout-box-r-line"></i>
+              <span>تسجيل الخروج</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+          <div class="metric-box">
+            <div>
+              <div class="metric-box-label">إجمالي النسخ المباعة</div>
+              <div class="metric-box-val" id="portal-stat-copies">0 نسخة</div>
+              <div class="metric-box-sub">تحديث لحظي ومباشر</div>
+            </div>
+            <div class="metric-box-icon blue"><i class="ri-book-mark-fill"></i></div>
+          </div>
+          <div class="metric-box">
+            <div>
+              <div class="metric-box-label">إجمالي أرباحك المحققة</div>
+              <div class="metric-box-val" id="portal-stat-earned">0 ج.م</div>
+              <div class="metric-box-sub" id="portal-stat-paid">سُدد: 0 ج.م</div>
+            </div>
+            <div class="metric-box-icon green"><i class="ri-coins-fill"></i></div>
+          </div>
+          <div class="metric-box">
+            <div>
+              <div class="metric-box-label">الرصيد المتبقي المستحق لك</div>
+              <div class="metric-box-val" id="portal-stat-balance" style="color: var(--brand-crimson);">0 ج.م</div>
+              <div class="metric-box-sub">صافي المستحقات الحالية</div>
+            </div>
+            <div class="metric-box-icon crimson"><i class="ri-wallet-3-fill"></i></div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 15.5px; font-weight: 800; margin: 18px 0 12px;"><i class="ri-book-read-fill" style="color: var(--brand-gold);"></i> مؤلفاتك وعقود النشر الخاصة بك</h3>
+        <div id="portal-books-showcase" class="books-showcase-grid" style="margin-bottom: 22px;"></div>
+
+        <h3 style="font-size: 15.5px; font-weight: 800; margin: 18px 0 12px;"><i class="ri-receipt-fill" style="color: var(--success);"></i> سجل الحوالات والإيصالات المحولة لك</h3>
+        <div id="portal-payouts-list"></div>
+      </section>
+
+      <!-- ================================================================
+           11. صفحات الإدخال الكاملة المستقلة (Full-Page Forms + Auto-Save)
+           ================================================================ -->
+
+      <!-- أ) صفحة إنشاء / تعديل ملف كاتب -->
+      <section id="view-form-author" class="app-view" style="display: none;">
+        <div class="page-card">
+          <div class="page-card-header">
+            <div>
+              <h3 id="form-author-title" style="font-size: 16.5px; font-weight: 800;">إنشاء ملف شخصي لكاتب جديد</h3>
+              <span class="badge green"><i class="ri-save-line"></i> حفظ مؤقت تلقائي في المتصفح</span>
+            </div>
+            <button type="button" class="btn btn-outline js-back-view" data-target="view-authors">
+              <i class="ri-arrow-right-line"></i><span>رجوع</span>
+            </button>
+          </div>
+          <form id="form-author" class="page-card-body">
+            <input type="hidden" id="author-id-field" />
+            <div class="form-block">
+              <div class="form-block-title"><i class="ri-user-star-fill"></i> البيانات الشخصية للمؤلف</div>
+              <div class="field">
+                <label>اسم الكاتب الكامل *</label>
+                <input type="text" id="author-name-field" data-draft="author_name" class="input-ctrl" required placeholder="مثال: أحمد رشاد محمد" />
+              </div>
+              <div class="grid-2">
+                <div class="field">
+                  <label>البريد الإلكتروني للكاتب (Google) *</label>
+                  <input type="email" id="author-email-field" data-draft="author_email" class="input-ctrl" required placeholder="author@gmail.com" dir="ltr" />
+                </div>
+                <div class="field">
+                  <label>رقم الهاتف / واتساب (اختياري)</label>
+                  <input type="text" id="author-phone-field" data-draft="author_phone" class="input-ctrl" placeholder="+201..." dir="ltr" />
+                </div>
+              </div>
+              <div class="field">
+                <label>صورة الكاتب الشخصية (اختياري - تُضغط وتُرفع تلقائياً)</label>
+                <input type="file" id="author-photo-file" class="input-ctrl" accept="image/*" />
+              </div>
+              <div class="field">
+                <label>نبذة أو ملاحظات عن الكاتب (اختياري)</label>
+                <textarea id="author-bio-field" data-draft="author_bio" class="input-ctrl" rows="3" placeholder="أي تفاصيل إضافية عن المؤلف..."></textarea>
+              </div>
+              <label id="author-welcome-wrap" style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; cursor: pointer;">
+                <input type="checkbox" id="author-welcome-check" checked style="width: 18px; height: 18px;" />
+                <span>تجهيز رسالة ترحيب رسمية لبريد الكاتب تتضمن رابط البوابة بعد الحفظ</span>
+              </label>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+              <button type="button" class="btn btn-outline js-clear-draft" data-prefix="author_">مسح المسودة</button>
+              <button type="submit" id="btn-submit-author" class="btn btn-crimson">
+                <i class="ri-check-double-line"></i><span>حفظ ملف الكاتب</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ب) صفحة توثيق / تعديل عقد كتاب شامل -->
+      <section id="view-form-book" class="app-view" style="display: none;">
+        <div class="page-card">
+          <div class="page-card-header">
+            <div>
+              <h3 id="form-book-title" style="font-size: 16.5px; font-weight: 800;">توثيق عقد كتاب جديد</h3>
+              <span class="badge green"><i class="ri-save-line"></i> حفظ مؤقت تلقائي في المتصفح</span>
+            </div>
+            <button type="button" class="btn btn-outline js-back-view" data-target="view-contracts">
+              <i class="ri-arrow-right-line"></i><span>رجوع</span>
+            </button>
+          </div>
+          <form id="form-book" class="page-card-body">
+            <input type="hidden" id="book-id-field" />
+
+            <div class="form-block">
+              <div class="form-block-title"><i class="ri-file-shield-2-fill"></i> أولاً: البيانات الأساسية للعقد والكتاب (إلزامية)</div>
+              <div class="grid-2">
+                <div class="field">
+                  <label>عنوان الكتاب (اسم التعاقد) *</label>
+                  <input type="text" id="book-title-field" data-draft="book_title" class="input-ctrl" required placeholder="أدخل اسم الكتاب..." />
+                </div>
+                <div class="field">
+                  <label>المؤلف صاحب العقد (ابحث واختر) *</label>
+                  <input type="text" id="book-author-filter" class="input-ctrl" placeholder="اكتب اسم المؤلف للفلترة السريعة..." style="margin-bottom: 6px; padding: 7px 12px; font-size: 12.5px;" />
+                  <select id="book-author-select" data-draft="book_author" class="input-ctrl" required></select>
+                </div>
+              </div>
+
+              <div class="grid-3">
+                <div class="field">
+                  <label>سعر بيع النسخة (ج.م) *</label>
+                  <input type="number" id="book-price-field" data-draft="book_price" class="input-ctrl" required min="1" step="0.5" placeholder="مثال: 120" />
+                </div>
+                <div class="field">
+                  <label>نسبة ربح المؤلف (%) *</label>
+                  <input type="number" id="book-royalty-field" data-draft="book_royalty" class="input-ctrl" required min="0" max="100" step="0.5" value="20" />
+                </div>
+                <div class="field">
+                  <label>مدة العقد (بالأشهر) *</label>
+                  <input type="number" id="book-months-field" data-draft="book_months" class="input-ctrl" required min="1" value="24" placeholder="24 شهر = سنتين" />
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label>تاريخ توقيع وبداية العقد *</label>
+                  <input type="date" id="book-date-field" data-draft="book_date" class="input-ctrl" required />
+                </div>
+                <div class="field" style="display: flex; align-items: center; padding-top: 22px;">
+                  <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 800; font-size: 13.5px;">
+                    <input type="checkbox" id="book-fav-check" style="width: 18px; height: 18px;" />
+                    <span><i class="ri-star-fill" style="color: #eab308;"></i> تمييز الكتاب في قائمة الأكثر طلباً (المفضلة)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-block">
+              <div class="form-block-title"><i class="ri-drive-fill"></i> ثانياً: ملف العقد الموثق PDF (Google Drive - اختياري)</div>
+              <div class="field">
+                <label>رابط ملف العقد (PDF) من جوجل درايف</label>
+                <input type="url" id="book-drive-field" data-draft="book_drive" class="input-ctrl" placeholder="https://drive.google.com/file/d/..." dir="ltr" />
+              </div>
+              <details style="background: var(--bg-surface); border: 1px solid var(--border-strong); padding: 10px 14px; border-radius: 10px; font-size: 12.5px;">
+                <summary style="font-weight: 800; cursor: pointer; color: var(--brand-crimson);">
+                  <i class="ri-information-fill"></i> تعليمات للموظف: كيف تفتح صلاحية رابط جوجل درايف ليظهر العقد ويتاح تحميله؟
+                </summary>
+                <ol style="margin-top: 8px; padding-right: 18px; line-height: 1.8;">
+                  <li>ارفع ملف العقد بصيغة <strong>PDF</strong> إلى حساب Google Drive.</li>
+                  <li>اضغط خيارات الملف واختر <strong>مشاركة (Share)</strong>.</li>
+                  <li>غيّر الصلاحية من "مقيّد" إلى <strong>"أي شخص لديه الرابط" (Anyone with the link)</strong>.</li>
+                  <li>انسخ الرابط والصقه هنا، وسيقوم النظام بعرضه داخل الصفحة وإتاحة تحميله مباشرة!</li>
+                </ol>
+              </details>
+            </div>
+
+            <div class="form-block">
+              <div class="form-block-title"><i class="ri-book-3-fill"></i> ثالثاً: بيانات الكتاب الإضافية والمخزون (جميعها اختيارية)</div>
+              <div class="grid-3">
+                <div class="field">
+                  <label>الترقيم الدولي (ISBN) / رقم الإيداع</label>
+                  <input type="text" id="book-isbn-field" data-draft="book_isbn" class="input-ctrl" placeholder="978-..." dir="ltr" />
+                </div>
+                <div class="field">
+                  <label>التصنيف الأدبي</label>
+                  <input type="text" id="book-cat-field" data-draft="book_cat" class="input-ctrl" placeholder="رواية، فكر، شعر..." />
+                </div>
+                <div class="field">
+                  <label>رقم الطبعة وسنة النشر</label>
+                  <input type="text" id="book-edition-field" data-draft="book_edition" class="input-ctrl" placeholder="الطبعة الأولى 2026" />
+                </div>
+              </div>
+
+              <div class="grid-3">
+                <div class="field">
+                  <label>عدد الصفحات</label>
+                  <input type="number" id="book-pages-field" data-draft="book_pages" class="input-ctrl" placeholder="مثال: 240" />
+                </div>
+                <div class="field">
+                  <label>الكمية المطبوعة (المخزون المتاح)</label>
+                  <input type="number" id="book-stock-field" data-draft="book_stock" class="input-ctrl" placeholder="مثال: 500 نسخة" />
+                </div>
+                <div class="field">
+                  <label>صورة غلاف الكتاب (اختياري)</label>
+                  <input type="file" id="book-cover-file" class="input-ctrl" accept="image/*" />
+                </div>
+              </div>
+
+              <div class="field" style="margin-bottom: 0;">
+                <label>بنود العقد وملاحظات الاتفاق الخاصة</label>
+                <textarea id="book-notes-field" data-draft="book_notes" class="input-ctrl" rows="3" placeholder="اكتب أهم بنود وشروط العقد المتفق عليها..."></textarea>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+              <button type="button" class="btn btn-outline js-clear-draft" data-prefix="book_">مسح المسودة</button>
+              <button type="submit" id="btn-submit-book" class="btn btn-crimson">
+                <i class="ri-check-double-line"></i><span>حفظ العقد والكتاب</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ج) صفحة استعراض وتحميل عقد الـ PDF المدمج -->
+      <section id="view-pdf-viewer" class="app-view" style="display: none;">
+        <div class="page-card">
+          <div class="page-card-header">
+            <h3 id="pdf-viewer-heading" style="font-size: 16px; font-weight: 800;"><i class="ri-file-pdf-2-fill" style="color: var(--danger);"></i> وثيقة العقد</h3>
+            <div style="display: flex; gap: 8px;">
+              <a id="btn-pdf-download" href="#" target="_blank" class="btn btn-crimson">
+                <i class="ri-download-2-line"></i><span>تحميل العقد مباشرة</span>
+              </a>
+              <button type="button" id="btn-close-pdf-view" class="btn btn-outline">
+                <i class="ri-arrow-right-line"></i><span>رجوع</span>
+              </button>
+            </div>
+          </div>
+          <div style="height: 75vh; background: #0f172a;">
+            <iframe id="pdf-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+          </div>
+        </div>
+      </section>
+
+      <!-- د) صفحة تسجيل دفعة مالية للكاتب + إرفاق الإيصال -->
+      <section id="view-form-payout" class="app-view" style="display: none;">
+        <div class="page-card">
+          <div class="page-card-header">
+            <div>
+              <h3 style="font-size: 16.5px; font-weight: 800;"><i class="ri-hand-coin-fill" style="color: var(--success);"></i> تسجيل دفعة مسددة للكاتب وإرفاق الإيصال</h3>
+              <span class="badge green"><i class="ri-save-line"></i> حفظ مؤقت تلقائي</span>
+            </div>
+            <button type="button" class="btn btn-outline js-back-view" data-target="view-authors">
+              <i class="ri-arrow-right-line"></i><span>رجوع</span>
+            </button>
+          </div>
+          <form id="form-payout" class="page-card-body">
+            <div class="form-block">
+              <div class="field">
+                <label>اختر المؤلف المستفيد *</label>
+                <select id="payout-author-select" data-draft="payout_author" class="input-ctrl" required></select>
+              </div>
+              <div class="grid-2">
+                <div class="field">
+                  <label>المبلغ المسدد (ج.م) *</label>
+                  <input type="number" id="payout-amount-field" data-draft="payout_amount" class="input-ctrl" required min="1" step="0.5" placeholder="مثال: 3000" />
+                </div>
+                <div class="field">
+                  <label>طريقة التحويل *</label>
+                  <select id="payout-method-field" data-draft="payout_method" class="input-ctrl">
+                    <option value="إنستا باي (InstaPay)">إنستا باي (InstaPay)</option>
+                    <option value="فودافون كاش / محفظة إلكترونية">فودافون كاش / محفظة إلكترونية</option>
+                    <option value="تحويل بنكي">تحويل بنكي</option>
+                    <option value="تسليم نقدي مباشر">تسليم نقدي مباشر</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label>صورة إيصال التحويل (تُضغط وتُرفع تلقائياً عبر ImgBB)</label>
+                <input type="file" id="payout-receipt-file" class="input-ctrl" accept="image/*" />
+              </div>
+              <div class="field" style="margin-bottom: 0;">
+                <label>ملاحظات الدفعة</label>
+                <input type="text" id="payout-notes-field" data-draft="payout_notes" class="input-ctrl" placeholder="مثال: دفعة من أرباح مبيعات المعرض..." />
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <button type="button" class="btn btn-outline js-clear-draft" data-prefix="payout_">مسح المسودة</button>
+              <button type="submit" id="btn-submit-payout" class="btn btn-success">
+                <i class="ri-check-double-line"></i><span>توثيق الدفعة والإيصال</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- هـ) صفحة تسجيل مصروف تشغيلي للدار -->
+      <section id="view-form-expense" class="app-view" style="display: none;">
+        <div class="page-card">
+          <div class="page-card-header">
+            <div>
+              <h3 style="font-size: 16.5px; font-weight: 800;"><i class="ri-receipt-fill" style="color: var(--danger);"></i> تسجيل مصروف تشغيلي للدار</h3>
+              <span class="badge green"><i class="ri-save-line"></i> حفظ مؤقت تلقائي</span>
+            </div>
+            <button type="button" class="btn btn-outline js-back-view" data-target="view-finance">
+              <i class="ri-arrow-right-line"></i><span>رجوع</span>
+            </button>
+          </div>
+          <form id="form-expense" class="page-card-body">
+            <div class="form-block">
+              <div class="field">
+                <label>بيان المصروف *</label>
+                <input type="text" id="expense-title-field" data-draft="exp_title" class="input-ctrl" required placeholder="مثال: طباعة دفعة جديدة / إيجار جناح المعرض" />
+              </div>
+              <div class="grid-2">
+                <div class="field">
+                  <label>المبلغ (ج.م) *</label>
+                  <input type="number" id="expense-amount-field" data-draft="exp_amount" class="input-ctrl" required min="1" step="0.5" placeholder="مثال: 1800" />
+                </div>
+                <div class="field">
+                  <label>التصنيف</label>
+                  <select id="expense-cat-field" data-draft="exp_cat" class="input-ctrl">
+                    <option value="طباعة وإنتاج">طباعة وإنتاج</option>
+                    <option value="تسويق وإعلانات">تسويق وإعلانات</option>
+                    <option value="معارض وشحن">معارض وشحن</option>
+                    <option value="مصاريف إدارية">مصاريف إدارية</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <button type="button" class="btn btn-outline js-clear-draft" data-prefix="exp_">مسح المسودة</button>
+              <button type="submit" class="btn btn-danger"><i class="ri-check-line"></i><span>توثيق المصروف</span></button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- و) صفحة إضافة / تعديل موظف مع الصلاحيات الـ 8 المرنة -->
+      <section id="view-form-staff" class="app-view" style="display: none;">
+        <div class="page-card">
+          <div class="page-card-header">
+            <h3 id="form-staff-title" style="font-size: 16.5px; font-weight: 800;">إضافة موظف وتخصيص صلاحياته</h3>
+            <button type="button" class="btn btn-outline js-back-view" data-target="view-staff">
+              <i class="ri-arrow-right-line"></i><span>رجوع</span>
+            </button>
+          </div>
+          <form id="form-staff" class="page-card-body">
+            <input type="hidden" id="staff-id-field" />
+            <div class="form-block">
+              <div class="form-block-title"><i class="ri-user-settings-fill"></i> بيانات الموظف</div>
+              <div class="grid-2">
+                <div class="field">
+                  <label>اسم الموظف *</label>
+                  <input type="text" id="staff-name-field" data-draft="staff_name" class="input-ctrl" required placeholder="اسم الموظف..." />
+                </div>
+                <div class="field">
+                  <label>البريد الإلكتروني (Google) *</label>
+                  <input type="email" id="staff-email-field" data-draft="staff_email" class="input-ctrl" required placeholder="employee@gmail.com" dir="ltr" />
+                </div>
+              </div>
+              <div class="field" style="margin-bottom: 0;">
+                <label>المسمى الوظيفي (اختياري)</label>
+                <input type="text" id="staff-job-field" data-draft="staff_job" class="input-ctrl" placeholder="مثال: مسؤول مبيعات المعرض" />
+              </div>
+            </div>
+
+            <div class="form-block">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                <div class="form-block-title" style="margin-bottom: 0;"><i class="ri-key-2-fill"></i> مصفوفة الصلاحيات المرنة</div>
+                <div style="display: flex; gap: 6px;">
+                  <button type="button" id="btn-staff-all-perms" class="btn btn-outline" style="padding: 4px 10px; font-size: 11.5px;">منح صلاحية كاملة</button>
+                  <button type="button" id="btn-staff-sell-only" class="btn btn-outline" style="padding: 4px 10px; font-size: 11.5px;">مبيعات فقط</button>
+                </div>
+              </div>
+              <div class="perm-checks-grid">
+                <label class="perm-box"><input type="checkbox" id="perm-sell" checked /><span>تسجيل مبيعات الكتب</span></label>
+                <label class="perm-box"><input type="checkbox" id="perm-add-book" checked /><span>إضافة وتعديل عقود الكتب</span></label>
+                <label class="perm-box"><input type="checkbox" id="perm-delete-book" /><span>حذف عقود الكتب</span></label>
+                <label class="perm-box"><input type="checkbox" id="perm-authors" checked /><span>إدارة ملفات الكُتّاب</span></label>
+                <label class="perm-box"><input type="checkbox" id="perm-payouts" /><span>تسديد دفعات وإيصالات الكُتّاب</span></label>
+                <label class="perm-box"><input type="checkbox" id="perm-expenses" /><span>تسجيل المصاريف التشغيلية</span></label>
+                <label class="perm-box"><input type="checkbox" id="perm-finance-view" /><span>رؤية أرباح الدار والسجل المالي</span></label>
+                <label class="perm-box"><input type="checkbox" id="perm-reports" checked /><span>إرسال التقارير للكُتّاب</span></label>
+              </div>
+            </div>
+
+            <div class="form-block" style="border-color: var(--danger);">
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 800; color: var(--danger); font-size: 13.5px;">
+                <input type="checkbox" id="staff-restricted-check" style="width: 18px; height: 18px;" />
+                <span>تقييد / تجميد حساب هذا الموظف مؤقتاً (منعه من الدخول للنظام)</span>
+              </label>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn btn-crimson"><i class="ri-save-3-line"></i><span>حفظ واعتماد صلاحيات الموظف</span></button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ز) صفحة إرسال تنبيه إداري للموظفين -->
+      <section id="view-form-notif" class="app-view" style="display: none;">
+        <div class="page-card">
+          <div class="page-card-header">
+            <h3 style="font-size: 16.5px; font-weight: 800;"><i class="ri-megaphone-fill" style="color: var(--brand-gold);"></i> إرسال تنبيه أو توجيه إداري</h3>
+            <button type="button" class="btn btn-outline js-back-view" data-target="view-notifications">
+              <i class="ri-arrow-right-line"></i><span>رجوع</span>
+            </button>
+          </div>
+          <form id="form-notif" class="page-card-body">
+            <div class="form-block">
+              <div class="grid-2">
+                <div class="field">
+                  <label>إرسال إلى *</label>
+                  <select id="notif-target-select" class="input-ctrl" required>
+                    <option value="all">جميع الموظفين وفريق العمل</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>الأهمية</label>
+                  <select id="notif-priority-select" class="input-ctrl">
+                    <option value="normal">توجيه إداري اعتيادي</option>
+                    <option value="urgent">تنبيه عاجل / ملاحظة على خطأ</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label>عنوان التنبيه *</label>
+                <input type="text" id="notif-title-field" data-draft="notif_title" class="input-ctrl" required placeholder="مثال: تنبيه بخصوص مبيعات اليوم..." />
+              </div>
+              <div class="field" style="margin-bottom: 0;">
+                <label>نص الرسالة أو التوجيه *</label>
+                <textarea id="notif-body-field" data-draft="notif_body" class="input-ctrl" rows="4" required placeholder="اكتب تفاصيل التوجيه للموظف..."></textarea>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn btn-crimson"><i class="ri-send-plane-fill"></i><span>إرسال التنبيه الآن</span></button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ح) صفحة إعداد وإرسال التقرير أو الترحيب للكاتب -->
+      <section id="view-form-report" class="app-view" style="display: none;">
+        <div class="page-card">
+          <div class="page-card-header">
+            <h3 style="font-size: 16.5px; font-weight: 800;"><i class="ri-mail-send-fill" style="color: var(--brand-crimson);"></i> إرسال تقرير رسمي أو ترحيب للكاتب</h3>
+            <button type="button" class="btn btn-outline js-back-view" data-target="view-author-detail">
+              <i class="ri-arrow-right-line"></i><span>رجوع لملف الكاتب</span>
+            </button>
+          </div>
+          <div class="page-card-body">
+            <input type="hidden" id="report-author-id" />
+            <div class="field">
+              <label>نوع الرسالة</label>
+              <select id="report-type-select" class="input-ctrl">
+                <option value="welcome">رسالة ترحيب رسمية باعتماد الحساب + رابط البوابة</option>
+                <option value="full_sales">تقرير مالي شامل بالمبيعات والمستحقات والحوالات</option>
+                <option value="contract_alert">إشعار بحالة وموعد انتهاء عقود الكتب</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>نص الرسالة (يمكنك التعديل عليه قبل الإرسال)</label>
+              <textarea id="report-text-area" class="input-ctrl" rows="9" style="line-height: 1.7;"></textarea>
+            </div>
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+              <button type="button" id="btn-copy-report" class="btn btn-outline">
+                <i class="ri-file-copy-line"></i><span>نسخ النص</span>
+              </button>
+              <button type="button" id="btn-mailto-report" class="btn btn-crimson">
+                <i class="ri-mail-send-line"></i><span>فتح البريد وإرسال للمؤلف</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- د) الشريط السفلي العائم بـ 5 أزرار مثل موسوعة الحجرية (Floating Bottom Dock) -->
+    <div id="floating-dock-container" class="floating-dock-wrap">
+      <nav class="floating-dock">
+        <button class="dock-item active" data-dock="view-dashboard">
+          <i class="ri-compass-3-line"></i>
+          <span>الرئيسية</span>
+        </button>
+
+        <button class="dock-item" data-dock="view-contracts">
+          <i class="ri-book-2-line"></i>
+          <span>الكتب</span>
+        </button>
+
+        <!-- الزر المركزي الثالث: إضافة (+) -->
+        <button id="btn-dock-quick-add" class="dock-item-add" title="إضافة سريعة">
+          <i class="ri-add-line"></i>
+        </button>
+
+        <button class="dock-item" data-dock="view-authors" id="dock-btn-authors">
+          <i class="ri-quill-pen-line"></i>
+          <span>المؤلفون</span>
+        </button>
+
+        <button class="dock-item" data-dock="view-profile">
+          <i class="ri-user-3-line"></i>
+          <span>حسابي</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- هـ) قائمة الإضافة السريعة عند الضغط على زر (+) في منتصف الشريط السفلي -->
+    <div id="quick-add-sheet" class="quick-add-sheet">
+      <div class="quick-add-box">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <h4 style="font-size: 16px; font-weight: 800;">ماذا تريد أن تضيف الآن؟</h4>
+          <button id="btn-close-quick-add" class="btn-close-drawer" style="background: var(--bg-subtle); color: var(--text-primary);">
+            <i class="ri-close-line"></i>
+          </button>
+        </div>
+        <div class="quick-add-grid">
+          <button class="quick-add-card" id="qadd-contract">
+            <i class="ri-book-mark-fill"></i>
+            <span>عقد كتاب جديد</span>
+          </button>
+          <button class="quick-add-card" id="qadd-author">
+            <i class="ri-user-add-fill"></i>
+            <span>ملف مؤلف جديد</span>
+          </button>
+          <button class="quick-add-card" id="qadd-payout">
+            <i class="ri-hand-coin-fill" style="color: var(--success);"></i>
+            <span>دفعة وإيصال لمؤلف</span>
+          </button>
+          <button class="quick-add-card" id="qadd-expense">
+            <i class="ri-receipt-fill" style="color: var(--brand-gold);"></i>
+            <span>مصروف تشغيلي</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ====================================================================
+       3. حوارات التأكيد الموثقة (للبيع، الحذف، وتسجيل الخروج فقط)
+       ==================================================================== -->
+
+  <!-- تأكيد بيع نسخة -->
+  <div id="modal-sell" class="confirm-modal">
+    <div class="confirm-box">
+      <div class="metric-box-icon green" style="width: 54px; height: 54px; font-size: 26px; margin: 0 auto 12px; border-radius: 50%;">
+        <i class="ri-shopping-bag-3-fill"></i>
+      </div>
+      <h3 style="font-size: 17.5px; font-weight: 800; margin-bottom: 4px;">هل أنت متأكد من بيع نسخة؟</h3>
+      <p id="sell-confirm-book-title" style="font-size: 13.5px; color: var(--brand-crimson); font-weight: 800; margin-bottom: 14px;"></p>
+
+      <form id="form-sell-confirm" style="text-align: right;">
+        <input type="hidden" id="sell-confirm-book-id" />
+        <div class="grid-2">
+          <div class="field">
+            <label>الكمية المباعة</label>
+            <input type="number" id="sell-confirm-qty" class="input-ctrl" min="1" value="1" required style="text-align: center; font-weight: 800; font-size: 16px;" />
+          </div>
+          <div class="field">
+            <label>قناة البيع</label>
+            <select id="sell-confirm-channel" class="input-ctrl">
+              <option value="بيع مباشر">بيع مباشر / الدار</option>
+              <option value="معرض كتاب">معرض كتاب</option>
+              <option value="متجر إلكتروني">متجر إلكتروني</option>
+              <option value="مكتبة / موزع">مكتبة / موزع</option>
+            </select>
+          </div>
+        </div>
+        <div style="background: var(--bg-subtle); padding: 10px 14px; border-radius: 10px; margin-bottom: 16px; display: flex; justify-content: space-between; font-size: 13.5px;">
+          <span>إجمالي المبلغ:</span>
+          <strong id="sell-confirm-total" style="color: var(--success); font-size: 15px;">0 ج.م</strong>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn btn-outline" style="flex: 1;" data-close-modal="modal-sell">إلغاء</button>
+          <button type="submit" class="btn btn-success" style="flex: 1;"><i class="ri-check-double-line"></i><span>تأكيد البيع</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- تأكيد تسجيل الخروج -->
+  <div id="modal-logout" class="confirm-modal">
+    <div class="confirm-box">
+      <div class="metric-box-icon crimson" style="width: 54px; height: 54px; font-size: 26px; margin: 0 auto 12px; border-radius: 50%;">
+        <i class="ri-logout-box-r-line"></i>
+      </div>
+      <h3 style="font-size: 17.5px; font-weight: 800; margin-bottom: 6px;">تأكيد تسجيل الخروج</h3>
+      <p style="font-size: 13.5px; color: var(--text-secondary); margin-bottom: 18px;">هل أنت متأكد من رغبتك في تسجيل الخروج من حسابك الآن؟</p>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn btn-outline" style="flex: 1;" data-close-modal="modal-logout">البقاء</button>
+        <button type="button" id="btn-confirm-logout-now" class="btn btn-danger" style="flex: 1;">نعم، خروج</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- تأكيد الحذف العام -->
+  <div id="modal-confirm" class="confirm-modal">
+    <div class="confirm-box">
+      <div class="metric-box-icon gold" style="width: 54px; height: 54px; font-size: 26px; margin: 0 auto 12px; border-radius: 50%;">
+        <i class="ri-alert-fill"></i>
+      </div>
+      <h3 id="confirm-title-text" style="font-size: 17.5px; font-weight: 800; margin-bottom: 6px;">تأكيد الإجراء</h3>
+      <p id="confirm-msg-text" style="font-size: 13.5px; color: var(--text-secondary); margin-bottom: 18px;"></p>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn btn-outline" style="flex: 1;" data-close-modal="modal-confirm">تراجع</button>
+        <button type="button" id="btn-confirm-exec" class="btn btn-danger" style="flex: 1;">تأكيد التنفيذ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- حاوية الإشعارات العلوية السريعة -->
+  <div id="toast-area" class="toast-area"></div>
+
+  <!-- المحرك الشامل (الملف الثالث والأخير) -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
